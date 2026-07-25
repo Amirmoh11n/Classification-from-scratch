@@ -2,11 +2,11 @@
 
 ## Overview
 
-This project implements an image classification system for the CIFAR-10 dataset using a Convolutional Neural Network (CNN) built with PyTorch.
+This project implements an image classification system on the CIFAR-10 dataset using a custom Convolutional Neural Network (CNN) built with PyTorch.
 
-The project follows Object-Oriented Programming (OOP) principles and a modular architecture to ensure maintainability, scalability, and code readability.
+The project is designed with a modular **Object-Oriented Programming (OOP)** architecture to provide clean code organization, scalability, and easy experimentation.
 
-The model is trained to classify images into one of ten categories:
+The model learns to classify images into 10 different categories:
 
 * Airplane
 * Automobile
@@ -33,13 +33,13 @@ cifar10_cnn_classifier/
 ├── configs/
 │   └── config.py
 │
-├── models/
-│   ├── __init__.py
-│   └── cnn.py
-│
 ├── datasets/
 │   ├── __init__.py
 │   └── cifar10_dataset.py
+│
+├── models/
+│   ├── __init__.py
+│   └── cnn.py
 │
 ├── trainers/
 │   ├── __init__.py
@@ -50,6 +50,12 @@ cifar10_cnn_classifier/
 │   ├── metrics.py
 │   ├── visualization.py
 │   └── seed.py
+│
+├── tests/
+│   ├── __init__.py
+│   ├── test_dataset.py
+│   ├── test_model.py
+│   └── test_trainer.py
 │
 ├── checkpoints/
 │
@@ -64,69 +70,73 @@ cifar10_cnn_classifier/
 
 ---
 
-## Features
+# Features
 
 * CIFAR-10 image classification
-* Convolutional Neural Network (CNN)
-* Modular OOP design
-* Reproducible experiments with fixed random seeds
-* Automatic model checkpoint saving
-* Training loss monitoring
-* Test accuracy evaluation
-* Training curve visualization
-* GPU acceleration support (CUDA)
+* Custom CNN architecture using PyTorch
+* Object-Oriented Programming design
+* Modular project structure
+* GPU acceleration support
+* Reproducible training with fixed random seeds
+* Automatic best model checkpoint saving
+* Training loss and accuracy visualization
+* Unit testing with PyTest
 
 ---
 
-## Technologies Used
+# Technologies
 
 * Python 3.x
 * PyTorch
 * Torchvision
 * NumPy
 * Matplotlib
+* PyTest
 
 ---
 
-## CNN Architecture
+# Model Architecture
 
-The network consists of:
+The CNN consists of two main parts:
 
-### Feature Extractor
+## Feature Extractor
 
-1. Conv2D (3 → 32)
+```
+Conv2D (3 → 32)
+ReLU
+MaxPooling
 
-2. ReLU
+Conv2D (32 → 64)
+ReLU
+MaxPooling
 
-3. MaxPooling
+Conv2D (64 → 128)
+ReLU
+MaxPooling
+```
 
-4. Conv2D (32 → 64)
+## Classifier
 
-5. ReLU
+```
+Flatten
 
-6. MaxPooling
+Linear (2048 → 256)
+ReLU
 
-7. Conv2D (64 → 128)
+Linear (256 → 10)
+```
 
-8. ReLU
-
-9. MaxPooling
-
-### Classifier
-
-1. Flatten
-2. Linear (2048 → 256)
-3. ReLU
-4. Linear (256 → 10)
+The final layer produces probabilities for the 10 CIFAR-10 classes.
 
 ---
 
-## Installation
+# Installation
 
 Clone the repository:
 
 ```bash
 git clone <repository-url>
+
 cd cifar10_cnn_classifier
 ```
 
@@ -134,6 +144,7 @@ Create a virtual environment:
 
 ```bash
 python -m venv venv
+
 source venv/bin/activate
 ```
 
@@ -145,39 +156,72 @@ pip install -r requirements.txt
 
 ---
 
-## Running the Project
+# Training
 
-Start training with:
+Run the training pipeline:
 
 ```bash
 python main.py
 ```
 
-The CIFAR-10 dataset will be downloaded automatically on the first run.
+The dataset will be automatically downloaded on the first execution.
 
----
-
-## Training Output
-
-During training, the console displays:
+During training:
 
 ```text
-Epoch [1/20] Loss: 1.4253 Test Acc: 49.32%
-Epoch [2/20] Loss: 1.0871 Test Acc: 58.14%
+Epoch [1/20] Loss: 1.42 Test Acc: 49.32%
+Epoch [2/20] Loss: 1.08 Test Acc: 58.14%
 ...
 ```
 
-The best model is automatically saved in:
+The best model is saved automatically:
 
-```text
+```
 checkpoints/cnn_best.pth
 ```
 
 ---
 
-## Reproducibility
+# Testing
 
-To ensure consistent experimental results, a fixed random seed is used:
+This project includes automated tests using **PyTest**.
+
+Run all tests:
+
+```bash
+pytest tests/
+```
+
+Run with detailed output:
+
+```bash
+pytest -v
+```
+
+The tests verify:
+
+## Dataset
+
+* Correct image shape
+* Correct label format
+* Valid CIFAR-10 class range
+
+## Model
+
+* Correct CNN forward pass
+* Correct output dimension
+* 10-class prediction support
+
+## Trainer
+
+* Correct initialization
+* Optimizer and loss function integration
+
+---
+
+# Reproducibility
+
+To make experiments repeatable, random seeds are controlled using:
 
 ```python
 set_seed(42)
@@ -192,45 +236,52 @@ This controls randomness in:
 
 ---
 
-## Results Visualization
+# Visualization
 
-After training, the project generates:
+The project generates training analysis:
 
 * Training Loss Curve
 * Test Accuracy Curve
 
-These plots help analyze model convergence and performance.
+Generated figures can be stored in:
+
+```
+outputs/figures/
+```
 
 ---
 
-## Future Improvements
+# Future Improvements
 
-Possible enhancements include:
+Possible extensions:
 
 * Data augmentation
-* Batch normalization
-* Dropout regularization
-* Learning rate scheduling
+* Batch Normalization
+* Dropout layers
+* Learning rate scheduler
 * Early stopping
-* TensorBoard integration
-* Confusion matrix visualization
-* Transfer learning with ResNet or EfficientNet
+* TensorBoard logging
+* Confusion matrix
+* Classification report
+* Transfer learning with ResNet / EfficientNet
+* Model deployment with FastAPI
 
 ---
 
-## Educational Purpose
+# Learning Goals
 
-This project was developed as a learning exercise in:
+This project was created to practice:
 
-* Deep Learning
+* Deep Learning fundamentals
 * Computer Vision
-* Convolutional Neural Networks
-* PyTorch
-* Object-Oriented Design
-* Machine Learning Experiment Management
+* CNN architectures
+* PyTorch workflow
+* Model training pipelines
+* Machine Learning project organization
+* Testing and reproducibility
 
 ---
 
-## License
+# License
 
-This project is available for educational and research purposes.
+This project is intended for educational and research purposes.
