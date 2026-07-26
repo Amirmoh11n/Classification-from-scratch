@@ -218,9 +218,9 @@ The validation/test dataset only uses normalization to provide fair evaluation.
 Clone the repository:
 
 ```bash
-git clone <repository-url>
+git clone [<repository-url>](https://github.com/Amirmoh11n/Classification-from-scratch/)
 
-cd cifar10-cnn-classification
+cd Classification-from-scratch
 ```
 
 Create a virtual environment:
@@ -368,7 +368,7 @@ Current model performance:
 | Model                      | Accuracy |
 | -------------------------- | -------: |
 | Basic CNN                  |     ~76% |
-| Deep CNN + Residual Blocks |    ~85%+ |
+| Deep CNN + Residual Blocks |    ~90%+ |
 
 Further improvements can be achieved with:
 
@@ -377,20 +377,6 @@ Further improvements can be achieved with:
 * WideResNet
 * Advanced schedulers
 * Longer training
-
----
-
-# Future Improvements
-
-Possible extensions:
-
-* Confusion matrix visualization
-* Precision / Recall / F1 metrics
-* TensorBoard integration
-* Mixed precision training
-* MixUp and CutMix augmentation
-* WideResNet implementation
-* Model deployment with FastAPI
 
 ---
 
