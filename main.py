@@ -11,11 +11,16 @@ from utils.seed import set_seed
 from utils.visualization import (
     plot_training_curves
 )
-
+import  os
 
 def main():
     set_seed(Config.SEED)
 
+    os.makedirs(
+        "checkpoints",
+        exist_ok=True
+    )
+    
     device = torch.device(
         "cuda"
         if torch.cuda.is_available()
