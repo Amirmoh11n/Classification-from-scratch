@@ -3,9 +3,9 @@ import torch
 
 class Config:
 
-    BATCH_SIZE = 64
-    EPOCHS = 20
-    LR = 0.001
+    BATCH_SIZE = 128
+    EPOCHS = 150
+    LR = 0.1
 
     NUM_CLASSES = 10
 

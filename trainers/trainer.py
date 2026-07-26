@@ -23,8 +23,8 @@ class Trainer:
 
         for images, labels in loader:
 
-            images = images.to(self.device)
-            labels = labels.to(self.device)
+            images = images.to(self.device , non_blocking=True)
+            labels = labels.to(self.device , non_blocking=True)
 
             self.optimizer.zero_grad()
 
