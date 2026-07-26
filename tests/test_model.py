@@ -1,6 +1,6 @@
 import torch
 
-from models.cnn import CNNClassifier
+from models.model import CNNClassifier
 
 
 def test_model_output():

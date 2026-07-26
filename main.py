@@ -4,7 +4,7 @@ import torch.optim as optim
 
 from configs.config import Config
 from datasets.cifar10_dataset import CIFAR10DataModule
-from models.cnn import CNNClassifier
+from models.model import CNNClassifier
 from trainers.trainer import Trainer
 
 from utils.seed import set_seed
@@ -12,6 +12,7 @@ from utils.visualization import (
     plot_training_curves
 )
 import  os
+from utils.visualization import Visualization
 
 def main():
     set_seed(Config.SEED)
@@ -20,7 +21,7 @@ def main():
         "checkpoints",
         exist_ok=True
     )
-    
+
     device = torch.device(
         "cuda"
         if torch.cuda.is_available()
@@ -36,6 +37,8 @@ def main():
     train_loader, test_loader = (
         data_module.get_loaders()
     )
+
+    visualizer = Visualization()
 
     model = CNNClassifier().to(device)
 
@@ -96,7 +99,7 @@ def main():
         f"\nBest Accuracy: {best_acc:.2f}%"
     )
 
-    plot_training_curves(
+    visualizer.plot_training_curves(
         train_losses,
         test_accuracies
     )

@@ -1,52 +1,141 @@
+import os
 import matplotlib.pyplot as plt
 import numpy as np
 import torchvision
 
 
-def show_batch(images):
+class Visualization:
 
-    grid = torchvision.utils.make_grid(images)
+    def __init__(
+        self,
+        output_dir="outputs/figures"
+    ):
+        self.output_dir = output_dir
 
-    img = grid.numpy()
-
-    plt.figure(figsize=(8, 8))
-
-    plt.imshow(
-        np.transpose(img, (1, 2, 0))
-    )
-
-    plt.axis("off")
-
-    plt.show()
+        os.makedirs(
+            self.output_dir,
+            exist_ok=True
+        )
 
 
-def plot_training_curves(
-    train_losses,
-    test_accuracies
-):
+    def show_batch(
+        self,
+        images,
+        filename="sample_images.png"
+    ):
 
-    plt.figure(figsize=(10, 5))
+        grid = torchvision.utils.make_grid(
+            images
+        )
 
-    plt.subplot(1, 2, 1)
+        img = grid.numpy()
 
-    plt.plot(train_losses)
+        plt.figure(
+            figsize=(8, 8)
+        )
 
-    plt.title("Train Loss")
+        plt.imshow(
+            np.transpose(
+                img,
+                (1, 2, 0)
+            )
+        )
 
-    plt.xlabel("Epoch")
+        plt.axis("off")
 
-    plt.ylabel("Loss")
+        path = os.path.join(
+            self.output_dir,
+            filename
+        )
 
-    plt.subplot(1, 2, 2)
+        plt.savefig(
+            path,
+            bbox_inches="tight"
+        )
 
-    plt.plot(test_accuracies)
+        plt.close()
 
-    plt.title("Test Accuracy")
+        print(
+            f"Saved: {path}"
+        )
 
-    plt.xlabel("Epoch")
 
-    plt.ylabel("Accuracy (%)")
+    def plot_training_curves(
+        self,
+        train_losses,
+        test_accuracies
+    ):
 
-    plt.tight_layout()
+        # Loss curve
 
-    plt.show()
+        plt.figure(
+            figsize=(8, 5)
+        )
+
+        plt.plot(
+            train_losses
+        )
+
+        plt.title(
+            "Training Loss"
+        )
+
+        plt.xlabel(
+            "Epoch"
+        )
+
+        plt.ylabel(
+            "Loss"
+        )
+
+        loss_path = os.path.join(
+            self.output_dir,
+            "training_loss.png"
+        )
+
+        plt.savefig(
+            loss_path,
+            bbox_inches="tight"
+        )
+
+        plt.close()
+
+
+        # Accuracy curve
+
+        plt.figure(
+            figsize=(8, 5)
+        )
+
+        plt.plot(
+            test_accuracies
+        )
+
+        plt.title(
+            "Test Accuracy"
+        )
+
+        plt.xlabel(
+            "Epoch"
+        )
+
+        plt.ylabel(
+            "Accuracy (%)"
+        )
+
+        acc_path = os.path.join(
+            self.output_dir,
+            "test_accuracy.png"
+        )
+
+        plt.savefig(
+            acc_path,
+            bbox_inches="tight"
+        )
+
+        plt.close()
+
+
+        print(
+            "Training curves saved!"
+        )

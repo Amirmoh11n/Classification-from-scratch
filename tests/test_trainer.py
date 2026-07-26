@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
-from models.cnn import CNNClassifier
+from models.model import CNNClassifier
 from trainers.trainer import Trainer
 
 
