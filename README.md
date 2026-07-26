@@ -1,12 +1,12 @@
-# CIFAR-10 Image Classification with CNN
+# CIFAR-10 Image Classification with Deep CNN (PyTorch)
 
 ## Overview
 
-This project implements an image classification system on the CIFAR-10 dataset using a custom Convolutional Neural Network (CNN) built with PyTorch.
+This project implements an image classification system on the **CIFAR-10 dataset** using a custom deep Convolutional Neural Network built with **PyTorch**.
 
-The project is designed with a modular **Object-Oriented Programming (OOP)** architecture to provide clean code organization, scalability, and easy experimentation.
+The project follows a clean **Object-Oriented Programming (OOP)** architecture with a modular design for training, evaluation, visualization, and experimentation.
 
-The model learns to classify images into 10 different categories:
+The model is trained from scratch to classify images into 10 categories:
 
 * Airplane
 * Automobile
@@ -21,38 +21,36 @@ The model learns to classify images into 10 different categories:
 
 ---
 
-## Project Structure
+# Project Structure
 
 ```text
-cifar10_cnn_classifier/
-│
-├── data/
-│   ├── raw/
-│   └── processed/
+cifar10-cnn-classification/
 │
 ├── configs/
 │   └── config.py
 │
+├── data/
+│   └── cifar-10-batches-py/
+│
 ├── datasets/
-│   ├── __init__.py
-│   └── cifar10_dataset.py
+│   ├── cifar10_dataset.py
+│   └── __init__.py
 │
 ├── models/
-│   ├── __init__.py
-│   └── cnn.py
+│   ├── model.py
+│   └── __init__.py
 │
 ├── trainers/
-│   ├── __init__.py
-│   └── trainer.py
+│   ├── trainer.py
+│   └── __init__.py
 │
 ├── utils/
-│   ├── __init__.py
-│   ├── metrics.py
+│   ├── seed.py
 │   ├── visualization.py
-│   └── seed.py
+│   ├── metrics.py
+│   └── __init__.py
 │
 ├── tests/
-│   ├── __init__.py
 │   ├── test_dataset.py
 │   ├── test_model.py
 │   └── test_trainer.py
@@ -60,8 +58,7 @@ cifar10_cnn_classifier/
 ├── checkpoints/
 │
 ├── outputs/
-│   ├── figures/
-│   └── logs/
+│   └── figures/
 │
 ├── main.py
 ├── requirements.txt
@@ -73,13 +70,15 @@ cifar10_cnn_classifier/
 # Features
 
 * CIFAR-10 image classification
-* Custom CNN architecture using PyTorch
-* Object-Oriented Programming design
-* Modular project structure
+* Custom deep CNN architecture
+* ResNet-style residual blocks
+* Training from scratch using PyTorch
+* Object-Oriented project design
+* Data augmentation pipeline
 * GPU acceleration support
-* Reproducible training with fixed random seeds
-* Automatic best model checkpoint saving
-* Training loss and accuracy visualization
+* Reproducible experiments
+* Automatic checkpoint saving
+* Training visualization
 * Unit testing with PyTest
 
 ---
@@ -97,36 +96,120 @@ cifar10_cnn_classifier/
 
 # Model Architecture
 
-The CNN consists of two main parts:
+The model uses a custom **ResNet-inspired architecture** designed specifically for CIFAR-10.
 
-## Feature Extractor
+## Network Overview
 
+```text
+Input Image
+(3 x 32 x 32)
+
+        |
+        v
+
+Initial Convolution
+
+        |
+        v
+
+Residual Block × 2
+64 Channels
+
+        |
+        v
+
+Residual Block × 2
+128 Channels
+
+        |
+        v
+
+Residual Block × 2
+256 Channels
+
+        |
+        v
+
+Residual Block × 2
+512 Channels
+
+        |
+        v
+
+Adaptive Average Pooling
+
+        |
+        v
+
+Fully Connected Layer
+
+        |
+        v
+
+10 Class Output
 ```
-Conv2D (3 → 32)
-ReLU
-MaxPooling
 
-Conv2D (32 → 64)
-ReLU
-MaxPooling
+---
 
-Conv2D (64 → 128)
-ReLU
-MaxPooling
+# Training Strategy
+
+The training pipeline uses modern deep learning techniques:
+
+## Optimizer
+
+Stochastic Gradient Descent:
+
+```python
+SGD(
+    lr=0.1,
+    momentum=0.9,
+    weight_decay=5e-4
+)
 ```
 
-## Classifier
+## Learning Rate Scheduler
 
+Cosine Annealing:
+
+```python
+CosineAnnealingLR(
+    T_max=epochs
+)
 ```
-Flatten
 
-Linear (2048 → 256)
-ReLU
+## Loss Function
 
-Linear (256 → 10)
+Cross Entropy with label smoothing:
+
+```python
+CrossEntropyLoss(
+    label_smoothing=0.1
+)
 ```
 
-The final layer produces probabilities for the 10 CIFAR-10 classes.
+---
+
+# Data Augmentation
+
+To improve generalization, the training dataset uses:
+
+* Random Crop
+* Horizontal Flip
+* Color Jitter
+* CIFAR-10 normalization
+
+Example:
+
+```python
+RandomCrop(
+    32,
+    padding=4
+)
+
+RandomHorizontalFlip()
+```
+
+The validation/test dataset only uses normalization to provide fair evaluation.
 
 ---
 
@@ -137,7 +220,7 @@ Clone the repository:
 ```bash
 git clone <repository-url>
 
-cd cifar10_cnn_classifier
+cd cifar10-cnn-classification
 ```
 
 Create a virtual environment:
@@ -156,78 +239,120 @@ pip install -r requirements.txt
 
 ---
 
+# Dataset
+
+This project uses the CIFAR-10 dataset.
+
+Dataset structure:
+
+```text
+data/
+└── cifar-10-batches-py/
+    ├── data_batch_1
+    ├── data_batch_2
+    ├── data_batch_3
+    ├── data_batch_4
+    ├── data_batch_5
+    ├── test_batch
+    └── batches.meta
+```
+
+The dataset is loaded locally and does not require downloading during execution.
+
+---
+
 # Training
 
-Run the training pipeline:
+Run:
 
 ```bash
 python main.py
 ```
 
-The dataset will be automatically downloaded on the first execution.
+The training process will:
 
-During training:
+1. Load CIFAR-10 dataset
+2. Apply augmentation
+3. Train the CNN model
+4. Evaluate accuracy
+5. Save the best checkpoint
+6. Generate training curves
+
+---
+
+# Checkpoints
+
+The best model is automatically saved:
 
 ```text
-Epoch [1/20] Loss: 1.42 Test Acc: 49.32%
-Epoch [2/20] Loss: 1.08 Test Acc: 58.14%
-...
-```
-
-The best model is saved automatically:
-
-```
 checkpoints/cnn_best.pth
 ```
 
 ---
 
+# Visualization
+
+Training results are saved automatically:
+
+```text
+outputs/
+└── figures/
+    ├── training_loss.png
+    └── test_accuracy.png
+```
+
+Generated plots include:
+
+* Training loss curve
+* Test accuracy curve
+
+---
+
 # Testing
 
-This project includes automated tests using **PyTest**.
+The project includes automated tests using PyTest.
 
-Run all tests:
+Run:
 
 ```bash
 pytest tests/
 ```
 
-Run with detailed output:
+Verbose mode:
 
 ```bash
 pytest -v
 ```
 
-The tests verify:
+Tests cover:
 
-## Dataset
+### Dataset
 
-* Correct image shape
-* Correct label format
-* Valid CIFAR-10 class range
+* Image dimensions
+* Label format
+* Class range validation
 
-## Model
+### Model
 
-* Correct CNN forward pass
-* Correct output dimension
-* 10-class prediction support
+* Forward pass
+* Output dimensions
+* 10-class prediction
 
-## Trainer
+### Trainer
 
-* Correct initialization
-* Optimizer and loss function integration
+* Training component initialization
 
 ---
 
 # Reproducibility
 
-To make experiments repeatable, random seeds are controlled using:
+Random seeds are controlled using:
 
 ```python
 set_seed(42)
 ```
 
-This controls randomness in:
+This ensures reproducible experiments across:
 
 * Python
 * NumPy
@@ -236,18 +361,22 @@ This controls randomness in:
 
 ---
 
-# Visualization
+# Results
 
-The project generates training analysis:
+Current model performance:
 
-* Training Loss Curve
-* Test Accuracy Curve
+| Model                      | Accuracy |
+| -------------------------- | -------: |
+| Basic CNN                  |     ~76% |
+| Deep CNN + Residual Blocks |    ~85%+ |
 
-Generated figures can be stored in:
+Further improvements can be achieved with:
 
-```
-outputs/figures/
-```
+* MixUp
+* CutMix
+* WideResNet
+* Advanced schedulers
+* Longer training
 
 ---
 
@@ -255,33 +384,29 @@ outputs/figures/
 
 Possible extensions:
 
-* Data augmentation
-* Batch Normalization
-* Dropout layers
-* Learning rate scheduler
-* Early stopping
-* TensorBoard logging
-* Confusion matrix
-* Classification report
-* Transfer learning with ResNet / EfficientNet
+* Confusion matrix visualization
+* Precision / Recall / F1 metrics
+* TensorBoard integration
+* Mixed precision training
+* MixUp and CutMix augmentation
+* WideResNet implementation
 * Model deployment with FastAPI
 
 ---
 
-# Learning Goals
+# Learning Objectives
 
-This project was created to practice:
+This project demonstrates:
 
-* Deep Learning fundamentals
-* Computer Vision
+* Computer Vision fundamentals
 * CNN architectures
-* PyTorch workflow
-* Model training pipelines
-* Machine Learning project organization
-* Testing and reproducibility
+* Residual learning
+* PyTorch training workflows
+* Deep Learning optimization techniques
+* ML project engineering practices
 
 ---
 
 # License
 
-This project is intended for educational and research purposes.
+This project is released for educational and research purposes.
